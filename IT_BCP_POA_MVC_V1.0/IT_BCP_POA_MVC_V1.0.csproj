@@ -145,6 +145,7 @@
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\jaiController.cs" />
     <Compile Include="Controllers\POAController.cs" />
     <Compile Include="Controllers\twrewrbController.cs" />
     <Compile Include="Controllers\xyzController.cs" />
@@ -201,6 +202,7 @@
     <Folder Include="Views\amg\" />
     <Folder Include="Views\Api\" />
     <Folder Include="Views\Default\" />
+    <Folder Include="Views\jai\" />
     <Folder Include="Views\twrewrb\" />
     <Folder Include="Views\xyz\" />
   </ItemGroup>
