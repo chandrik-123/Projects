@@ -1,0 +1,109 @@
+﻿@model IEnumerable<IT_BCP_POA_MVC_V1._0.Models.MST_POA_Entity>
+
+@{
+    ViewBag.Title = "GetEntity";
+}
+
+
+<h2>GetEntity</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.entity_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dept_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.loc_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.div_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dept_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.create_dt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.created_by)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mod_dt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mod_by)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mst_status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.current_status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.next_status)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+   
+    <td>
+        @Html.DisplayFor(modelItem => item.entity_name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.dept_name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.loc_id)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.div_id)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.dept_id)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.create_dt)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.created_by)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.mod_dt)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.mod_by)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.mst_status)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.current_status)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.next_status)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.entity_id }) |
+        @Html.ActionLink("Details", "Details", new { id = item.entity_id }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.entity_id })
+    </td>
+    </tr>
+   
+    <tr>
+       
+    </tr>
+}
+
+</table>
+<th>
+    @Html.DropDownList("entitylist", ViewBag.entity as SelectList, "Select");
+</th>
+
