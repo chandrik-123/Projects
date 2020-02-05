@@ -141,6 +141,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="Content\abcController.cs" />
+    <Compile Include="Controllers\amgController.cs" />
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -196,6 +197,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\abc\" />
+    <Folder Include="Views\amg\" />
     <Folder Include="Views\Api\" />
     <Folder Include="Views\Default\" />
     <Folder Include="Views\xyz\" />
