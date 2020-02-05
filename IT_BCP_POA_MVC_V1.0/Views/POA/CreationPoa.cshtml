@@ -1,0 +1,1138 @@
+﻿@using IT_BCP_POA_MVC_V1._0.Models
+
+@*@model IEnumerable<IT_BCP_POA_MVC_V1._0.Models.Tx_Poa>*@
+@model ViewModel
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial scale=1">
+    <script src="~/Scripts/jquery-3.4.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script>
+        $(function () {
+            $("#submit").click(function () {
+                alert('submit');
+                alert("please select token");
+            });
+        });
+    </script>
+
+    <script>
+        function ClearFields() {
+
+            document.getElementById("txtapproverid").value = "";
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnSave").click(function () {
+
+
+
+                var datasa = [];
+
+                $('tr.data-contact-person').each(function () {
+
+                    var enname = $(this).find('.text-field1').val();
+
+                    var fname = $(this).find('.text-field2').val();
+                    var pwtypename = $(this).find('.text-field3').val();
+                    var power = $(this).find('.text-field4').val();
+                    var req_no = $('#req_no').text();
+                    var request_date = $('#requestdate').text();
+                    var requestor = $('#requestor').text();
+                    //  var req_no = $('#req_no').text();
+
+                    var token_no = $('#token').val();
+                    // var pow_appr_id = "4";
+                    var event_id = "1";
+                    var create_dt = "";
+                    var created_by = "chandrika";
+                    var mod_dt = "";
+                    var mod_by = "chandrika";
+                    var tx_status = $('#status').text();
+                    var pow_no = "1025";
+
+                    var tk = $("#ii").val();
+                    var apprname = $(this).find('.appr_name').text();
+                    var comments = $(this).find('.comment').text();
+                    var pow_appr_id = $(this).find().text();
+
+
+                    var commenr = $("#textclss").val();
+
+
+
+                    var alldata = {
+
+                        'entity_id': enname,
+                        'func_id': fname,
+                        'pow_type_id': pwtypename,
+                        'pow_no': power,
+                        'request_date': request_date,
+                        'requestor': requestor,
+                        'req_no': req_no,
+                        'token_no': token_no,
+                        //'pow_appr_id': pow_appr_id,
+                        'event_id': event_id,
+                        'create_dt': create_dt,
+                        'created_by': created_by,
+                        'mod_dt': mod_dt,
+                        'mod_by': mod_by,
+                        'tx_status': tx_status,
+                        'pow_no': "1025",
+                        'token': tk,
+                        'appr_name': apprname,
+                        'comments': commenr,
+
+
+
+
+                    }
+
+                    datasa.push(alldata);
+
+
+
+                });
+
+
+                var approver = [];
+                $('tr.sa').each(function () {
+                    var tokenid = $(this).find('.text-field7').val();
+
+                    var approvername = $(this).find('.text-field8').val();
+                    //var comment = $(this).find('#textclss').val();
+                    var comment = $.trim($("#textclss").val());
+
+
+
+                    var approvaldata = {
+                        'token': tokenid,
+                        'appr_name': approvername,
+                        'comments': comment,
+
+                    }
+
+                    approver.push(approvaldata);
+
+
+
+                });
+
+
+
+                if (datasa.length > 0 && approver.length > 0) {
+                    var url = "@Url.Action("InsertApprovaldeatails1","POA")";
+
+                    var apprdata = JSON.stringify(approver);
+
+
+                    $.post(url, { 'appdetails': apprdata }, function (data) {
+                        if (data != 0 && data > 0) {
+                             var data1 = JSON.stringify(datasa);
+                            var url = "@Url.Action("InsertEntityHistory","POA")";
+
+                            $.post(url, { 'mydata': data1 }, function (data) {
+
+                                if (data != 0 && data > 0) {
+                                    var data1 = JSON.stringify(datasa);
+                                    var url = "@Url.Action("Create","POA")";
+                                    $.post(url, { 'mydatas': data1 }, function (data) {
+
+                                        if (data != 0 && data > 0) {
+
+
+                                        }
+
+                                        success:
+                                    {
+
+                                    alert("Data has been Added Succussfully");
+                                    location.reload();
+                                }
+                                    });
+                                }
+
+
+
+
+
+                            });
+                        }
+
+                    });
+                }
+                else {
+                    alert("please enter field");
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#entity_id").change(function () {
+
+                var value = $("#entity_id").val();
+
+                $.ajax({
+                    type: 'GET',
+                    contentType: "application/json; charset=utf-8",
+                    url: '/POA/getfunctionsbyid',
+                    dataType: "json",
+                    data: { 'id': value },
+                    success: function (response) {
+                        JSON.stringify(response);
+
+                        var items1 = '';
+
+
+                        var items1 = "<select id=''>";
+                        items1 = items1 + '<option value="">Please Select</option>';
+
+                        $.each(response, function (i, ntry) {
+
+
+                            items1 += "<option value='" + ntry.entity_id + "'>" + ntry.func_name + "</option>";
+                        });
+
+                        $('#funid').html(items1);
+
+                    },
+                    error: function (err) {
+                        var items1 = "<select id='funid'>";
+                        items1 = items1 + '<option value="">Please Select</option>';
+                        $('#funid').html(items1);
+                    }
+
+
+                });
+            });
+
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#pow_type_id").change(function () {
+
+                var value = $("#pow_type_id").val();
+                $.ajax({
+                    type: 'GET',
+                    contentType: "application/json; charset=utf-8",
+                    url: '/POA/getpowerbypowertypeid',
+                    dataType: "json",
+                    data: { 'id': value },
+                    success: function (response) {
+                        JSON.stringify(response);
+
+                        var items1 = '';
+
+
+                        var items1 = "<select id='powerid'>";
+                        items1 = items1 + '<option value="">Please Select</option>';
+
+                        $.each(response, function (i, ntry) {
+
+
+                            items1 += "<option value='" + ntry.pow_type_id + "'>" + ntry.pow_name + "</option>";
+                        });
+
+                        $('#powerid').html(items1);
+
+                    },
+                    error: function (err) {
+                        var items1 = "<select id='powerid'>";
+                        items1 = items1 + '<option value="">Please Select</option>';
+                        $('#powerid').html(items1);
+                    }
+
+
+                });
+            });
+
+        });
+
+    </script>
+
+
+
+    <script type="text/javascript">
+
+
+
+        $(function () {
+            $("#btnGet").click(function () {
+                var function1 = $("#entity_id option:selected").text();
+
+                var function1value = $("#entity_id option:selected").val();
+                var function2 = $("#funid option:selected").text();
+
+                var function2value = $("#funid option:selected").val();
+                var function3 = $("#pow_type_id option:selected").text();
+
+                var function3value = $("#pow_type_id option:selected").val();
+
+                var function4 = $("#powerid option:selected").text();
+
+                var function4value = $("#powerid option:selected").val();
+
+
+                if (function1 == "Please Select" && function2 == "Please Select" && function3 == "Please Select" && function4 == "Please Select") {
+
+
+                    alert("please select entity ,function,powertype,power");
+                }
+                else if (function1 != "Please Select" && function2 == "Please Select" && function3 == "Please Select" && function4 == "Please Select") {
+
+
+                    alert("please select power ,function,powertyp");
+                }
+                else if (function1 != "Please Select" && function2 != "Please Select" && function3 == "Please Select" && function4 == "Please Select") {
+                    alert("select  powertype and power");
+                }
+                else if (function1 != "Please Select" && function2 != "Please Select" && function3 != "Please Select" && function4 == "Please Select") {
+                    alert("select power");
+
+                }
+                else if (function1 == "Please Select" && function2 == "Please Select" && function3 != "Please Select" && function4 != "Please Select") {
+                    alert("select entity ,function");
+
+                }
+                else if (function1 != "Please Select" && function2 != "Please Select" && function3 == "Please Select" && function4 != "Please Select") {
+                    alert("select powertype ");
+
+                }
+                else if (function1 == "Please Select" && function2 == "Please Select" && function3 != "Please Select" && function4 == "Please Select") {
+                    alert("select entity function power ");
+
+                }
+                else if (function1 == "Please Select" && function2 != "Please Select" && function3 != "Please Select" && function4 != "Please Select") {
+                    alert("select entity");
+
+                }
+
+                    else if (function1 != "Please Select" && function2 == "Please Select" && function3 != "Please Select" && function4 != "Please Select") {
+                    alert("select function");
+
+                }
+                    
+                                         else if (function1 =="Please Select" && function2 == "Please Select" && function3 != "Please Select" && function4 != "Please Select") {
+                    alert("select entity and function");
+
+                }
+                     else if (function1 != "Please Select" && function2 != "Please Select" && function3 == "Please Select" && function4 != "Please Select") {
+                    alert("select  powertype");
+
+                }
+                else {
+
+
+                    //var abc = '<button type="button" id="Deletes" class="deleteContact glyphicon glyphicon-remove"></button>';
+
+
+                    $("#entity_id")[0].selectedIndex = 0;
+                    $("#funid")[0].selectedIndex = 0;
+                    $("#pow_type_id")[0].selectedIndex = 0;
+                    $("#powerid")[0].selectedIndex = 0;
+                    var c = $(".Deletes").show();
+
+                    $("#append").append("<tr class='data-contact-person'>"
+
+                        + "<td id='token'><input type='hidden' class='text-field1'  value='" + function1value + "'/>" + function1 + "</td>"
+                        + "<td id='appr_name'><input type='hidden' class='text-field2'  value='" + function2value + "'/>" + function2 + "</td>"
+                        + "<td id='token'><input type='hidden' class='text-field3'  value='" + function3value + "'/>" + function3 + "</td>"
+                        + "<td id='appr_name'><input type='hidden' class='text-field4'  value='" + function4value + "'/>" + function4 + "</td>"
+                        + "<td>" + '<button type="button" id="Deletes" class="deleteContact glyphicon glyphicon-remove"></button>' + "</td>"
+
+                        + "</tr>");
+
+                }
+
+            });
+
+
+
+            $(document).on("click", ".deleteContact", function () {
+
+                $(this).closest("tr").remove(); // closest used to remove the respective 'tr' in which I have my controls
+            });
+
+        });
+
+
+
+
+    </script>
+
+
+    <script type="text/javascript">
+
+
+
+
+        $(function abc() {
+
+            $("#approverid").click(function () {
+
+
+
+                var value = $("#txtapproverid").val();
+                if (value == "") {
+                    alert("please enter token");
+                }
+
+                var apprname = $("#appr_name").val();
+
+
+                var commenr = $("#textclss").val();
+
+
+
+                $.ajax({
+                    type: 'GET',
+                    contentType: "application/json; charset=utf-8",
+                    url: '/POA/getapprovalist',
+                    dataType: "json",
+                    data: { 'id': value },
+                    success: function (response) {
+
+
+                        if (response == "") {
+                            alert('please enter valid token');
+                            ClearFields();
+                        }
+
+                        else {
+                            JSON.stringify(response);
+
+                            var c = $(".Deletes").show();
+                            debugger;
+                            var outputArray = [];
+                           
+                            $('tr.sa').each(function () {
+                                var approverdata = $(this).find('.text-field7').val();
+                                outputArray.push(approverdata);
+                            });
+                            alert(outputArray);
+                            alert(outputArray.length);
+
+                            if (outputArray.length >0) {
+                                debugger;
+                                 var isInArray = outputArray.includes(value);
+                                if (isInArray) {
+
+                                }
+                                else {
+
+                                     $(response).each(function (index, emp) {
+
+
+
+                                        var rows = "<tr class='sa'>"
+
+                                            + "<td class='token'><input type='hidden' id='ii' class='text-field7' value=" + value + " ' />" + value + "</td>"
+                                            + "<td class='appr_name'><input type='hidden' id='appr_name' class='text-field8' value=" + emp.appr_name + "'  />" + emp.appr_name + "</td>"
+
+                                            + "<td>" + '<button type="button" id="Deletes" class="deleteContact glyphicon glyphicon-remove"></button>' + "</td>"
+                                        "<tr>"
+
+                                            + "<td class='commenr'><input type='hidden' id='#textclss' class='textclss' value=" + emp.commenr + "'  />" + emp.commenr + "</td>"
+
+
+                                        $("#tables tr:last").after(rows);
+
+
+
+
+                                        ClearFields();
+
+
+
+                                    });
+                                }
+
+                            }
+                            
+                            if (outputArray.length == 0) {
+                                debugger;
+                                alert(value);
+                                var isInArray = outputArray.includes(value);
+                                if (isInArray) {
+
+
+                                    alert("item aleray exits");
+                                }
+
+
+                                else {
+                                    $(response).each(function (index, emp) {
+                                        debugger;
+                                        if (outputArray.length != 1) {
+
+                                            var rows = "<tr class='sa'>"
+
+                                                + "<td class='token'><input type='hidden' id='ii' class='text-field7' value=" + value + " ' />" + value + "</td>"
+                                                + "<td class='appr_name'><input type='hidden' id='appr_name' class='text-field8' value=" + emp.appr_name + "'  />" + emp.appr_name + "</td>"
+
+                                                + "<td>" + '<button type="button" id="Deletes" class="deleteContact glyphicon glyphicon-remove"></button>' + "</td>"
+                                            "<tr>"
+
+                                                + "<td class='commenr'><input type='hidden' id='#textclss' class='textclss' value=" + emp.commenr + "'  />" + emp.commenr + "</td>"
+
+
+                                            $("#tables tr:last").after(rows);
+
+
+                                            ClearFields();
+                                        }
+
+
+                                    });
+
+
+                                }
+
+
+                            }
+
+                            else {
+                                if (outputArray.length = 1)
+                                    debugger;
+                                alert(value);
+                                var isInArray = outputArray.includes(value);
+                                if (isInArray) {
+
+
+                                    
+
+                               
+
+                                    alert("Item is already Exist");
+                                }
+                            
+                                
+
+                                else {
+                                    $(response).each(function (index, emp) {
+
+                                        if (outputArray.length != 1) {
+
+                                            var rows = "<tr class='sa'>"
+
+                                                + "<td class='token'><input type='hidden' id='ii' class='text-field7' value=" + value + " ' />" + value + "</td>"
+                                                + "<td class='appr_name'><input type='hidden' id='appr_name' class='text-field8' value=" + emp.appr_name + "'  />" + emp.appr_name + "</td>"
+
+                                                + "<td>" + '<button type="button" id="Deletes" class="deleteContact glyphicon glyphicon-remove"></button>' + "</td>"
+                                            "<tr>"
+
+                                                + "<td class='commenr'><input type='hidden' id='#textclss' class='textclss' value=" + emp.commenr + "'  />" + emp.commenr + "</td>"
+
+
+                                            $("#tables tr:last").after(rows);
+                                           //$("#tables tr:last").remove();
+
+                                            ClearFields();
+                                        }
+
+
+                                    });
+
+
+                                }
+
+
+                            }
+                            }
+                            
+                        }
+
+
+                    
+
+                });
+
+
+            });
+        });
+
+    </script>
+
+
+
+    <style>
+        #collapse1 {
+            overflow-y: scroll;
+            height: 100px;
+        }
+    </style>
+
+    <style>
+        .navbar-fixed-top {
+            height: 215% !important;
+            margin: 0px auto;
+            left: 0;
+            right: 0;
+            padding: 0;
+        }
+
+        .dropbtn {
+            background-color: red;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+                .dropdown-content a:hover {
+                    background-color: red;
+                }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+    </style>
+
+</head>
+
+
+<nav class="navbar navbar-default" style="background-color:red">
+    <div class="container" style="width:-100px">
+        <div class="navbar-header">
+
+        </div>
+        <div class="dropdown">
+            <ul class="nav navbar-nav">
+            </ul>
+
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Master <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/POA/CreationPoa">Creation Of POA</a></li>
+                    <li><a href="/Home/Contact">Renewal of Power of Attorney</a></li>
+                    <li><a href="#">Transfer of Power of Attorney</a></li>
+                </ul>
+            </li>
+
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Request <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Assign Rights</a></li>
+                    <li><a href="#">New</li>
+                    <li><a href="#">Renewal</a></li>
+                    <li><a href="#">Transfer</li>
+                    <li><a href="#">Cancellation</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reports <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Creation Of POA</a></li>
+                    <li><a href="#">Renewal of Power of Attorney</a></li>
+                    <li><a href="#">Transfer of Power of Attorney</a></li>
+                </ul>
+            </li>
+            </ul>
+
+
+
+        </div>
+
+
+
+    </div>
+</nav>
+
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="background-color:red"> </div>
+    <div class="panel-body">
+        <div class="clearfix"> </div>
+        <div class="row">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @if (ViewBag.message != null)
+
+            {
+
+
+
+                foreach (var d in ViewBag.message)
+                {
+                    using (Html.BeginForm("CreationPoa", "POA", FormMethod.Post))
+                    {
+
+                        <div class="col-md-4">
+                            <div>
+                                <label> Request No:</label>
+
+
+                                <b id="req_no"> @d.req_no</b>
+
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <label id="requestors"> Requestor:</label>
+
+
+                                <b style="color:red" id="requestor">@d.requestor</b>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <label> Request Date:</label>
+                                <b style="color:green" id="requestdate">@d.req_date</b>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <label id="token_no"> Token No:</label>
+                                <label>
+                                    @if (ViewBag.holdtokenvalue == null)
+                                    {
+                                        <input type="text" value="" id="token" @*name="id"*@ />
+                                    }
+                                    else
+                                    {
+                                        <input type="text" value="@ViewBag.holdtokenvalue" id="token" @*name="id"*@ />
+                                    }
+
+                                </label>
+
+                                @*<button type="submit" value="poa">su</button>*@
+
+                                @*<button class="btn" id="ko">
+                                        <i class="fas fa-user-check"> </i>
+                                        <span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-ok" input type="Submit" value="POA" style="color:red" id="ko" />
+                                    </button>*@
+
+                                <button class="btn">
+                                    <i class="fas fa-user-check"> </i>
+                                    <span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-ok" input type="Submit" value="POA" style="color:red" />
+
+                                </button>
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <label> Employee Name=</label>
+                                <b style="color:red" id="employeename"> @d.employee_name</b>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <label> Status=</label>
+                                <b style="color:red" id="status">@d.status</b>
+
+                            </div>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+
+                using (Html.BeginForm("CreationPoa", "POA", FormMethod.Post))
+                {
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="col-md-4">
+                        <div>
+                            <label> Request No:</label>
+                            @*@Html.ValidationMessageFor(model=>model.re);*@
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div>
+                            <label id="requ"> Requestor:</label>
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div>
+                            <label> Request Date:</label>
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div>
+                            <label> Token No:</label>
+                            <label>
+                                <input type="number" value="" id="token" name="id" required />
+                            </label>
+
+                            @*<input type="submit" value="POA" />*@
+                            @if (ViewBag.alert == 1)
+                            {
+                                <label style="color:red">please enter valid token</label>
+                            }
+
+
+                            <button class="btn" id="ko">
+                                <i class="fas fa-user-check"> </i>
+                                <span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-ok" input type="Submit" value="POA" style="color:red" />
+
+                            </button>
+
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div>
+                            <label> Employee Name:</label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div>
+                            <label> Status:</label>
+
+                        </div>
+                    </div>
+
+
+                }
+
+
+            }
+
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-offset-0 col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<b style="color:red"> Designation</b>
+
+<table class="table table-bordered">
+    <thead>
+
+        <tr>
+            <th scope="col">
+                Entity
+            </th>
+            <th>
+                @Html.DropDownListFor(x => x.MST_s, new SelectList(@ViewBag.entity, "entity_id", "entity_name"), "Please Select", new { @class = "form-control", @id = "entity_id" })
+                @Html.ValidationMessageFor(x => x.MST_s, "", new { @class = "text-danger" })
+            </th>
+
+
+            <th scope="col"> Function</th>
+
+
+            @*<th>
+                    @Html.DropDownListFor(x => x.Functions_s, new SelectList(@ViewBag.function, "func_id", "func_name"), "Please Select", new { @class = "form-control", @id = "func_id" })
+                    @Html.ValidationMessageFor(x => x.Functions_s, "", new { @class = "text-danger" })
+
+                </th>*@
+            <th>
+
+                <select id="funid" style="width:200px" class="form-control">
+                    <option>Please Select</option>
+
+                </select>
+
+            </th>
+
+        </tr>
+
+        <tr>
+            <th scope="col">
+                Power Type
+
+            </th>
+            <th>
+                @Html.DropDownListFor(x => x.powertype_s, new SelectList(@ViewBag.powertype, "pow_type_id", "pow_type"), "Please Select", new { @class = "form-control", @id = "pow_type_id" })
+
+            </th>
+
+
+            <th scope="col"> Power</th>
+
+            @*<th>
+                    @Html.DropDownListFor(x => x.power_s, new SelectList(@ViewBag.Power, "pow_name", "pow_name"),  "Please Select", new { @class = "form-control" })
+
+                </th>*@
+            <th>
+
+                <select id="powerid" style="width:200px" class="form-control">
+                    <option>Please Select</option>
+
+                </select>
+
+            </th>
+        </tr>
+
+    </thead>
+
+
+</table>
+<table class="table table-bordered">
+    <thead>
+        @*<tr>
+                <td>
+                    <input type="submit" value="ADD" style="float: left; background-color:red">
+                </td>
+            </tr>*@
+        <tr>
+            <th scope="col">
+
+                <input type="submit" value="ADD" style="float: right; background-color:red" id="btnGet">
+
+            </th>
+        </tr>
+    </thead>
+</table>
+
+<div class="container">
+    <h5 style="color:red">New/Additions Required</h5>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <!--<div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapse1">Collapsible list group with table</a>
+                </h4>
+            </div>-->
+            <div id="collapse1" class="#collapse1">
+                <table class="table" id="append">
+
+                    <thead>
+
+                        <tr>
+                            <th>Entity</th>
+                            <th>Function</th>
+
+                            <th>Power Type</th>
+                            <th>Power</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div>
+        <b style="color:red">Approver Details:</b>
+        <label>
+            <input type="number" value="" name="txtapproverid" id="txtapproverid"  />
+
+
+
+            <button class="btn" id="approverid">
+                <i class="fas fa-user-check"> </i>
+                <span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-ok" input type="Submit" value="POA" style="color:red" id="approverid" />
+
+            </button>
+        </label>
+
+
+    </div>
+
+</div>
+@*<div class="col-md-4">
+    <div>
+        <label>Approver Details</label>
+        <label>*@
+@*<input type="text" value="" id="txtapproverid" name="id" />
+    </label>**@ @*<button class="btn" id="approverid">
+                <i class="fas fa-user-check"> </i>
+                <span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-ok"  value="POA" style="color:red" />
+
+            </button>
+
+
+
+        </div>
+    </div>*@
+    @*<table>
+            <thead>
+                <h6 style="color:red">Approver details</h6>
+
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label>
+
+                            <input type="text" value="" id="txtapproverid" name="id" />
+                        </label>
+                    </td>
+                    <td>
+                        <i class="fas fa-user-check"> </i>
+                    </td>
+
+
+                    <td>
+                        <button class="btn" id="approverid">
+                            <i class="fas fa-user-check"> </i>
+                            <span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-ok" input type="Submit" value="POA" style="color:red" />
+
+                        </button>
+                    </td>
+
+                </tr>
+            </tbody>
+
+        </table>*@
+
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @using (Html.BeginForm("CreationPoa", "POA", FormMethod.Post))
+            {
+                <div id="collapse1" class="#collapse1">
+
+
+                    <table class="table" id="tables">
+
+                        <thead>
+                            <tr>
+                                <th>Token No</th>
+                                <th>Approver Name</th>
+
+                                <th>Delete</th>
+
+
+                            </tr>
+
+
+
+
+                        </thead>
+
+
+
+
+                        <tbody>
+                        </tbody>
+
+                    </table>
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <div class="panel-group">
+                    <div class="panel panel-default">
+
+
+
+
+
+                        <table class="table" id="tables">
+
+                            <thead>
+                                <tr>
+                                    <th>Comments</th>
+
+
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>
+                                        <textarea class="form-control" id="textclss" rows="4" style=" min-width:500px; max-width:100%;min-height:50px;height:100%;width:100%;" required="required"></textarea>
+                                        @Html.ValidationMessageFor(model => model.approvers.comments, "", new { @class = "text-danger" })
+                                    </td>
+                                </tr>
+                            </tbody>
+
+
+                        </table>
+
+
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="form-group col-md-1">
+            <div style="float: right; display:inline-block;">
+                <input class="btn btn-primary" name="btnSave" id="btnSave" value="Save" type="button">
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
